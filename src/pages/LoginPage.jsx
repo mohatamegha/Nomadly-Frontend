@@ -5,6 +5,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { MdPersonOutline, MdOutlineMailOutline, MdOutlineLock } from "react-icons/md";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,24 +13,27 @@ function LoginPage() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log('login submit');
-  //   e.preventDefault();
+    e.preventDefault();
     
-  //   try {
-  //     const postData = {
-  //       email: email,
-  //       password: password
-  //     };  
-  //     const response = await axios.post('http://localhost:8080/auth/login', postData);
-  //     // localStorage.setItem('token', response.data.token); this is okay for temporary basis
-  //     // setPostId(response.data.id); // Axios returns data in response.data
-  //     // setTitle('');
-
-  //   } catch (err) {
-  //     setError(err.message);
-  //     console.error("Error making POST request:", err);
-  //   }
+    try {
+      const postData = {
+        email: email,
+        password: password
+      };  
+      const response = await axios.post('http://localhost:8080/auth/login', postData)
+        
+      // localStorage.setItem('megha','megha');
+      localStorage.setItem('token', response.data); //this is okay for temporary basis
+      console.log('Login successful:', response.data);
+      toast.success("Login successful!");
+      navigate('/discover');
+    } catch (err) {
+      setError(err.message);
+      toast.error("Login failed. Please check your credentials.");
+      console.error("Error making POST request:", err);
+    }
   }
 
   return (

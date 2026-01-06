@@ -4,15 +4,36 @@ import SideBar from "../components/SideBar";
 import { FaArrowLeft } from "react-icons/fa6";
 import { MdPersonOutline, MdOutlineMailOutline, MdOutlineLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function SignUpPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('user signup');
+    try{
+      const postData = {
+        name: name,
+        email: email,
+        password: password
+      };
+      const response = await axios.post('http://localhost:8080/auth/signup', postData);
+      console.log('Signup successful:', response.data);
+      toast.success("Signup successful! Please login.");
+      navigate('/login');
+    }
+    catch(err){
+      setError(err.message);
+      toast.error("Signup failed. Please try again.");
+      console.error("Error making POST request:", err);
+    }
   }
 
   return (

@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { g } from "framer-motion/client";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 
 //1. check the api request and response
@@ -19,10 +20,34 @@ function AddTripPage() {
   const [maxPeople, setMaxPeople] = useState("");
   const [budget, setBudget] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [tripPhoto, setTripPhoto] = useState("");
+  const [tripPhoto, setTripPhoto] = useState(undefined);
 
   const [errors, setErrors] = useState({});
   const [showToast, setShowToast] = useState(false);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files?.[0] || null;
+    setTripPhoto(selectedFile);
+    console.log('Selected file:', selectedFile);
+  };
+
+
+  //calling the post API of cloudinary to upload image
+  async function uploadFile(file) {
+    //console.log(file);
+    const url = `https://api.cloudinary.com/v1_1/djlozkenj/upload`;
+    const fd = new FormData();
+    fd.append('upload_preset', 'testing');
+    fd.append('file', file);
+
+    const response = await axios.post(
+      url,
+      fd,
+    );
+
+    console.log('Cloudinary response:', response.data);
+    return response.data;
+  }
 
   const validate = () => {
     const newErrors = {};
@@ -58,32 +83,38 @@ function AddTripPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    //if (!validate()) return;
 
-    console.log({
-      destination,
-      description,
-      duration,
-      maxPeople,
-      budget,
-      startDate,
-      tripPhoto
-    });
+    const handleUpload = async () => {
+      try{
+        const apiResponse = await uploadFile(tripPhoto);
+        const url = apiResponse.url;
+        //console.log('Uploaded image public ID:', public_id);
+        return url;
+      }
+      catch(err){
+        console.error('Error uploading file:', err);
+        throw err;
+      }
+    }
 
-    
-    const travelPostData = { 
-      destination: destination, 
-      duration: duration, 
-      startDate: startDate,
-      budget: budget,
-      description: description,
-      groupSize: maxPeople,
-      userId: 1 
-      //travelType
-      //userEmail
-    };
-    
-    try {
+    try{
+      const url = await handleUpload(); //this will be sent to backend to get images later
+      console.log('Uploaded image public url:', url);
+      const travelPostData = { 
+        imageUrl: url,
+        destination: destination, 
+        startDate: startDate,
+        duration: duration, 
+        budget: budget,
+        description: description,
+        groupSize: maxPeople,
+        //userId: 1 
+        //travelType
+        //userEmail
+      };
+
+      // Now send travelPostData to backend
       const response = await axios.post(
         "http://localhost:8080/travels",
         travelPostData,
@@ -94,26 +125,43 @@ function AddTripPage() {
           }
         }
       );
-      
-      // setPostId(response.data.id);
-      // setTitle("");
-
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
-      // Reset form
+      console.log('Trip created successfully:', response.data);
+      toast.success("Trip created successfully!");
       setDestination("");
       setDescription("");
       setDuration("");
       setMaxPeople("");
       setBudget("");
       setStartDate("");
-      setTripPhoto("");
+      setTripPhoto(undefined);
       setErrors({});
-
-    } catch (err) {
-      setErrors(err.response?.data || err.message);
-      console.error("Error making POST request:", err);
     }
+    catch(err){
+      console.error('Error in file upload process:', err);
+      toast.error("Failed to create trip. Please try again.");
+      return;
+    }
+    
+
+    
+    
+
+    //   setShowToast(true);
+    //   setTimeout(() => setShowToast(false), 3000);
+    //   // Reset form
+    //   setDestination("");
+    //   setDescription("");
+    //   setDuration("");
+    //   setMaxPeople("");
+    //   setBudget("");
+    //   setStartDate("");
+    //   setTripPhoto("");
+    //   setErrors({});
+
+    // } catch (err) {
+    //   setErrors(err.response?.data || err.message);
+    //   console.error("Error making POST request:", err);
+    // }
   };
 
   return (
@@ -233,10 +281,10 @@ function AddTripPage() {
             Trip Photo*
           </label>
           <input
-            value={tripPhoto}
-            onChange={(e) => setTripPhoto(e.target.value)}
+            onChange={handleFileChange}
             className="input"
-            placeholder="https://image-url..."
+            type="file"
+            placeholder="upload a file"
           />
           {errors.tripPhoto && <p className="error">{errors.tripPhoto}</p>}
         </div>

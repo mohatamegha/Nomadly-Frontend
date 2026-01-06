@@ -3,12 +3,14 @@ import AddTripPage from "./pages/AddTripPage";
 import DiscoverPage from "./pages/DiscoverPage";
 import HomePage from "./pages/HomePage";
 import AppRoutes from "./routes/AppRoute";
+import { Toaster } from "react-hot-toast";
 // import { AuthProvider } from "./context/AuthContext";
 // import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
     <div className="App">
+      <Toaster position="top-center" reverseOrder={false} />
       {/* <DiscoverPage/> */}
       {/* <AddTripPage/> */}
       {/* <ProfilePage/> */}

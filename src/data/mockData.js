@@ -13,6 +13,7 @@ export const mockTravels = [
     memberFirstNames: ["Rahul", "Priya", "Aman"],
     coverPhoto:
       "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+      // https://res.cloudinary.com/djlozkenj/image/upload/wuc6dlt8fr3wnhlsnnya
   },
   {
     travelId: 2,
