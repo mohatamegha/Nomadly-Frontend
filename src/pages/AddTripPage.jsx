@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 import { g } from "framer-motion/client";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import { addTrip } from "../data/api";
 
 //1. check the api request and response
 //2. handle how the images are taken as input 
@@ -115,16 +115,7 @@ function AddTripPage() {
       };
 
       // Now send travelPostData to backend
-      const response = await axios.post(
-        "http://localhost:8080/travels",
-        travelPostData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        }
-      );
+      const response = await addTrip(travelPostData);
       console.log('Trip created successfully:', response.data);
       toast.success("Trip created successfully!");
       setDestination("");
