@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   motion,
   AnimatePresence,
@@ -6,15 +6,55 @@ import {
   useTransform
 } from "framer-motion";
 import { mockTravels } from "../data/mockData";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const SWIPE_THRESHOLD = 0.15;
 
 function TravelListings() {
+  const [travels, setTravels] = useState([]);
+
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
-  const travel = mockTravels[index];
+  const fetchTravels = async () => {
+    try{
+      const response = await axios.get(
+        'http://localhost:8080/travels',
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );  
+      const fetchedTravels = response.data.map( (travel) => (
+        {
+          travelId: travel.travelId,
+          destination: travel.destination,
+          startDate: travel.startDate,
+          duration: travel.duration,
+          budget: travel.budget,
+          description: travel.description,
+          groupSize: travel.groupSize,
+          currentMembersCount: travel.membersJoined,
+          coverPhoto: travel.imageUrl
+        }
+      ));
+      setTravels(fetchedTravels);
+    }
+    catch(err){
+      console.error("Error fetching travel listings:", err);
+      toast.error("Failed to fetch travel listings. Please try again.");
+      return;
+    }
+  };
+  
+  useEffect( () => {
+    fetchTravels();
+  }, []);
+
+  const travel = travels[index];
 
   // Motion values
   const x = useMotionValue(0);
