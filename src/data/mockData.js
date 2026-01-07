@@ -5,13 +5,13 @@ export const mockTravels = [
     startDate: "2025-01-15",
     duration: 5,
     budget: 10000,
-    travelType: "SPIRITUAL",
+    travelType: "SPIRITUAL", //not used currently; not stored in db
     description:
       "Explore the spiritual capital of India. Visit ancient ghats and experience rich culture.",
     groupSize: 8,
-    currentMembersCount: 3,
-    memberFirstNames: ["Rahul", "Priya", "Aman"],
-    coverPhoto:
+    currentMembersCount: 3, //saved in the name "members Joined"
+    memberFirstNames: ["Rahul", "Priya", "Aman"], //not used currently; not stored in db
+    coverPhoto: //saved in the name "imageUrl"
       "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
       // https://res.cloudinary.com/djlozkenj/image/upload/wuc6dlt8fr3wnhlsnnya
   },
