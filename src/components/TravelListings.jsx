@@ -5,7 +5,7 @@ import {
   useMotionValue,
   useTransform
 } from "framer-motion";
-import { mockTravels } from "../data/mockData";
+// import { mockTravels } from "../data/mockData";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -17,6 +17,27 @@ function TravelListings() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
+
+  const handleRightSwipe = (travelId) => {
+    commitSwipe(1);
+    console.log(travelId);
+    console.log("Right swipe detected - Interested in this trip!");
+    const joinTrip = async() =>{
+      const response = await axios.post(
+        `http://localhost:8080/travels/${travelId}/join`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      console.log(response);
+    }
+
+    joinTrip();
+  };
+
 
   const fetchTravels = async () => {
     try{
@@ -78,13 +99,17 @@ function TravelListings() {
   };
 
   const handleDragEnd = (_, info) => {
-    if (isExiting) return;
-
     const swipeRatio = info.offset.x / window.innerWidth;
+
     if (Math.abs(swipeRatio) > SWIPE_THRESHOLD) {
-      commitSwipe(swipeRatio > 0 ? 1 : -1);
+      if (swipeRatio > 0) {
+        handleRightSwipe(travel.travelId);   // ❤️ RIGHT SWIPE
+      } else {
+        commitSwipe(-1);      // ❌ LEFT SWIPE
+      }
     }
   };
+
 
   return (
     <div className="relative w-full h-[70vh] flex justify-center pt-4 overflow-hidden">
@@ -165,13 +190,13 @@ function TravelListings() {
                 disabled={isExiting}
                 onClick={() => commitSwipe(-1)}
                 className="text-4xl disabled:opacity-40"
-              >
+                >
                 ❌
               </button>
 
               <button
                 disabled={isExiting}
-                onClick={() => commitSwipe(1)}
+                onClick={()=>handleRightSwipe(travel.travelId)}
                 className="text-4xl disabled:opacity-40"
               >
                 ❤️

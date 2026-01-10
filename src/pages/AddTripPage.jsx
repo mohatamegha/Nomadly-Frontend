@@ -1,11 +1,11 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { LuMapPin } from "react-icons/lu";
 import { CiCalendarDate } from "react-icons/ci";
 import { GoPeople } from "react-icons/go";
 import { MdCurrencyRupee } from "react-icons/md";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { g } from "framer-motion/client";
+// import { g } from "framer-motion/client";
 import axios from "axios";
 import toast from "react-hot-toast";
 

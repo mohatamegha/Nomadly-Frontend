@@ -60,7 +60,7 @@ function Footer({ activeTab = "discover"}) {
         {/* Profile */}
         <button
           onClick={() => {
-            navigate('/profile');
+            navigate('/update-profile');
           }}
           className={`flex flex-col items-center text-xs ${
             activeTab === "profile" ? "text-blue-600" : "text-gray-400"
