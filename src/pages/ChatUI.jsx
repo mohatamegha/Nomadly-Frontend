@@ -35,7 +35,7 @@ const ChatUI = () => {
    const indexNum=Number(index);
    console.log(indexNum)
    
-   const { users, memberCounts, travelGroups } = location.state || {};
+   const { users, memberCounts, travelGroups,loggedInUser } = location.state || {};
     const travel=travelGroups[indexNum]
     console.log(travelGroups)
     
@@ -101,7 +101,7 @@ const handleSend = () => {
 
     const payload = {
       content: message,
-      userId: 3,
+      userId: loggedInUser.userId,
       travelId: travel.travelId,
     };
 
@@ -161,13 +161,13 @@ const handleSend = () => {
             color:'black'
           }}
         >
-         {travel.destination}
+         {travel.destination} Trip
         </Typography>
         <Typography
           color="text.secondary"
           sx={{ fontSize: { xs: "0.85rem", sm: "1rem" } }}
         >
-          {memberCounts[travel.travelId]} members joined
+          {memberCounts} members joined
         </Typography>
         </Box>
       
@@ -180,7 +180,7 @@ const handleSend = () => {
       }}} onClick={toggleDrawer(true)}><IoIosArrowForward/></IconButton>
          
         <Drawer anchor="right" open={open} onClose={toggleDrawer(false)} >
-        <DrawerList onExpand={toggleDrawer} travel={travel} users={users[travel.travelId]} memberCount={memberCounts[travel.travelId]} />
+        <DrawerList onExpand={toggleDrawer} travel={travel} users={users[travel.travelId]} memberCount={memberCounts} />
       </Drawer>
       </Grid>
 
@@ -206,7 +206,7 @@ const handleSend = () => {
   </Grid>
 <Box sx={{ pt: "90px", pb: "90px", px: 3 }}>
   {messages.map((msg, index) => {
-    const isMe = msg.user.userId === 29; // replace with loggedInUserId
+    const isMe = msg.user.userId === loggedInUser.userId; // replace with loggedInUserId
 
     return (
       <Box
@@ -318,6 +318,7 @@ const handleSend = () => {
       },
     }}
     onClick={handleSend}
+    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
   >
     <IoIosSend />
   </IconButton>

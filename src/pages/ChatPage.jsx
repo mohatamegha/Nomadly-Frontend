@@ -17,14 +17,21 @@ import { useNavigate } from "react-router-dom";
 
 import { MdLocationOn } from "react-icons/md";
 import React from "react";
-import { getTravelCount, getUsersForTravel, getUserTravels } from "../data/api";
+import {getUsersForTravel, getUserTravels,getUserDetails } from "../data/api";
 
 const ChatPage = () => {
 const token=localStorage.getItem("token")
 const [travelGroups,setTravelGroups]=useState([])
-const [memberCounts, setMemberCounts] = useState({});
+const [user,setUser]=useState([])
+// const [memberCounts, setMemberCounts] = useState({});
 const [travelUsers, setTravelUsers] = useState({});
 useEffect(() => {
+  getUserDetails(token).then((response)=>{
+  setUser(response.data);
+  console.log(user);
+  }).catch((error)=>{
+    console.error("Error loading user",error);
+  })
   getUserTravels(token)
     .then((response) => {
       const travels = Array.isArray(response.data)
@@ -34,7 +41,7 @@ useEffect(() => {
       console.log(travels)
       // fetch count + users for each travel
       travels?.forEach(travel => {
-        fetchCount(travel.travelId);
+        // fetchCount(travel.travelId);
         fetchUsers(travel.travelId);
       });
     })
@@ -42,16 +49,17 @@ useEffect(() => {
       console.error("Error fetching travel data", error);
     });
 }, []);
-const fetchCount = (travelId) => {
-  getTravelCount(travelId, token)
-    .then((res) => {
-      setMemberCounts(prev => ({
-        ...prev,
-        [travelId]: res.data
-      }));
-    })
-    .catch(err => console.error("Count error", err));
-};
+
+// const fetchCount = (travelId) => {
+//   getTravelCount(travelId, token)
+//     .then((res) => {
+//       setMemberCounts(prev => ({
+//         ...prev,
+//         [travelId]: res.data
+//       }));
+//     })
+//     .catch(err => console.error("Count error", err));
+// };
 
 const fetchUsers = (travelId) => {
   getUsersForTravel(travelId, token)
@@ -75,7 +83,8 @@ const fetchUsers = (travelId) => {
       
       travelGroups: travelGroups,
       users: travelUsers || {},
-      memberCounts: memberCounts || {}
+      memberCounts: travelGroups[index].membersJoined||0,
+      loggedInUser:user
   }
  });
  }
@@ -124,7 +133,7 @@ const fetchUsers = (travelId) => {
           <MdLocationOn /> India
         </Typography>
         <Typography variant="h7" color="text.secondary">
-          👥 {memberCounts[travel.travelId] || 0}/{travel.groupSize}
+          👥 {travel.membersJoined || 0}/{travel.groupSize}
         </Typography>
       </Box>
 
