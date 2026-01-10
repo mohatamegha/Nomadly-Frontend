@@ -20,9 +20,6 @@ function AppRoutes() {
         <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/discover" element={<DiscoverPage/>} />
         <Route path="/add-trip" element={<AddTripPage/>} />
-        <Route path="/chats" element={<ChatPage/>}/>
-        <Route path="/chat/:index" element={<ChatUI/>}></Route>
-        <Route path="/update-profile" element={<UpdateUserPage/>}/>
       </Route>
     </Routes>
   )

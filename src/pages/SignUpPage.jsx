@@ -34,7 +34,7 @@ function SignUpPage() {
         email: email,
         password: password
       };
-      const response = await axios.post('http://localhost:8080/auth/signup', postData);
+      const response = await signUpUser(postData);
       console.log('Signup successful:', response.data);
       toast.success("Signup successful! Please login.");
       navigate('/login');

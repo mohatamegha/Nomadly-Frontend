@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { MdPersonOutline, MdOutlineMailOutline, MdOutlineLock } from "react-icons/md";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { LoginUser } from "../data/api";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ function LoginPage() {
         email: email,
         password: password
       };  
-      const response = await axios.post('http://localhost:8080/auth/login', postData)
+      const response = await LoginUser(postData)
         
       // localStorage.setItem('megha','megha');
       localStorage.setItem('token', response.data); //this is okay for temporary basis

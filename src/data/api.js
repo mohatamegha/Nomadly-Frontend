@@ -78,5 +78,19 @@ export const addTrip=(data)=>{
           }
     }
     )
+<<<<<<< HEAD
 }
 export default api
+=======
+  }
+    export const getUserDetails=()=>{
+    return api.get("users/me",
+    {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+    }
+    )
+}
+export default api;
+>>>>>>> 1fa20f6352f39fc220adeee5fdd2aaa36144f20e
