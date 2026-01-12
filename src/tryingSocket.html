@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<script>
+  const socket = new WebSocket("ws://localhost:8080/ws");
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, () => {
+    console.log("CONNECTED");
+
+    stompClient.subscribe("/topic/chat/1", msg => {
+      console.log("RECEIVED:", msg.body);
+    });
+
+    stompClient.send("/app/chat.send", {}, JSON.stringify({
+      travelId: 1,
+      userId: 1,
+      content: "Hello Manali!"
+    }));
+  });
+</script>
+</body>
+</html>

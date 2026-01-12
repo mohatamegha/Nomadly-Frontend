@@ -8,6 +8,7 @@ import LoginPage from "../pages/LoginPage";
 import ProtectedLayout from "./ProtectedLayout";
 import ChatPage from "../pages/ChatPage";
 import ChatUI from "../pages/ChatUI";
+import UpdateUserPage from "../pages/UpdateUserPage";
 
 function AppRoutes() {
   return (
@@ -19,8 +20,6 @@ function AppRoutes() {
         <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/discover" element={<DiscoverPage/>} />
         <Route path="/add-trip" element={<AddTripPage/>} />
-        <Route path="/chats" element={<ChatPage/>}></Route>
-        <Route path="/chat/:index" element={<ChatUI/>}></Route>
       </Route>
     </Routes>
   )

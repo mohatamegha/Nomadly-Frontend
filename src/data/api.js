@@ -78,6 +78,10 @@ export const addTrip=(data)=>{
           }
     }
     )
+<<<<<<< HEAD
+}
+export default api
+=======
   }
     export const getUserDetails=()=>{
     return api.get("users/me",
@@ -89,3 +93,4 @@ export const addTrip=(data)=>{
     )
 }
 export default api;
+>>>>>>> 1fa20f6352f39fc220adeee5fdd2aaa36144f20e

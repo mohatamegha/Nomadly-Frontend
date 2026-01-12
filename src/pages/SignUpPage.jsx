@@ -17,8 +17,18 @@ function SignUpPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('user signup');
     try{
+      if(name==="" || email==="" || password===""){
+        toast.error("All fields are mandatory!");
+        return;
+      }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error("Enter a valid email address!");
+        return;
+      }
+
       const postData = {
         name: name,
         email: email,
@@ -75,6 +85,7 @@ function SignUpPage() {
             <div className="relative">
               <MdPersonOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
               <input
+                required
                 type="text"
                 placeholder="Enter your name"
                 value={name}
@@ -92,6 +103,7 @@ function SignUpPage() {
             <div className="relative">
               <MdOutlineMailOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
               <input
+                required
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -109,6 +121,7 @@ function SignUpPage() {
             <div className="relative">
               <MdOutlineLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
               <input
+                required
                 type="password"
                 placeholder="Enter your password"
                 value={password}
