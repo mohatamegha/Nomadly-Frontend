@@ -76,13 +76,13 @@ const fetchUsers = (travelId) => {
   
   const navigate=useNavigate();
  const handleChat=(index)=>{
-  
+  const travel=travelGroups[index]
   navigate(`/chat/${index}`,
  {
   state:{
       
       travelGroups: travelGroups,
-      users: travelUsers || {},
+      users: travelUsers[travel.travelId] || {},
       memberCounts: travelGroups[index].membersJoined||0,
       loggedInUser:user
   }
@@ -103,7 +103,7 @@ const fetchUsers = (travelId) => {
           </Box>
 
           <Avatar
-            src="/test.png"
+            src={user.photo}
             sx={{ width:45,height:45}}
           />
         </Toolbar>
@@ -116,7 +116,7 @@ const fetchUsers = (travelId) => {
             {console.log(index)}
             <ListItem button onClick={()=>handleChat(index)} alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar sx={{width:{xs:"50px",md:"70px"},height:{xs:"50px",md:"70px"}}}src="/test.png" />
+                <Avatar sx={{width:{xs:"50px",md:"70px"},height:{xs:"50px",md:"70px"}}}src={travel.imageUrl} />
               </ListItemAvatar>
            <ListItemText
   primary={
@@ -130,7 +130,7 @@ const fetchUsers = (travelId) => {
       {/* Country + members count */}
       <Box sx={{ marginLeft:"15px",display: "flex", alignItems: "center", gap: 2 }}>
         <Typography variant="h7" color="text.secondary">
-          <MdLocationOn /> India
+          <MdLocationOn /> {travel.country||"India"}
         </Typography>
         <Typography variant="h7" color="text.secondary">
           👥 {travel.membersJoined || 0}/{travel.groupSize}
@@ -143,7 +143,7 @@ const fetchUsers = (travelId) => {
             {(travelUsers[travel.travelId] || []).map(user => (
     <Avatar
       key={user.userId}
-      src={user.photo || "/test.png"}
+      src={user.photo}
       alt={user.name}
     />
   ))}

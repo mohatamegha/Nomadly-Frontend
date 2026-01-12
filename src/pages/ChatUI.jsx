@@ -33,13 +33,13 @@ const ChatUI = () => {
     
    const {index}=useParams();
    const indexNum=Number(index);
-   console.log(indexNum)
+   //console.log(indexNum)
    
    const { users, memberCounts, travelGroups,loggedInUser } = location.state || {};
     const travel=travelGroups[indexNum]
-    console.log(travelGroups)
-    
-    console.log(travelGroups[indexNum])
+   // console.log(travelGroups)
+   // console.log(users)
+    //console.log(travelGroups[indexNum])
     const navigate=useNavigate();
     const [open, setOpen] = React.useState(false);
     const [message,setMessage]=useState("");
@@ -135,7 +135,7 @@ const handleSend = () => {
       {/* Group Avatar */}
       <Grid item size={{xs:2,md:0.7}}>
         <Avatar
-          src="/test.png"
+          src={travel.imageUrl}
           sx={{
             width: { xs: 40, sm: 48 },
             height: { xs: 40, sm: 48 },
@@ -180,14 +180,14 @@ const handleSend = () => {
       }}} onClick={toggleDrawer(true)}><IoIosArrowForward/></IconButton>
          
         <Drawer anchor="right" open={open} onClose={toggleDrawer(false)} >
-        <DrawerList onExpand={toggleDrawer} travel={travel} users={users[travel.travelId]} memberCount={memberCounts} />
+        <DrawerList onExpand={toggleDrawer} travel={travel} users={users} memberCount={memberCounts} />
       </Drawer>
       </Grid>
 
-      {/* Avatar Group */}
       <Grid item size={{xs:2}}>
         <AvatarGroup
           max={4}
+         
           sx={{
             justifyContent: "flex-end",
             "& .MuiAvatar-root": {
@@ -197,10 +197,15 @@ const handleSend = () => {
             },
           }}
         >
-          <Avatar src="/static/images/avatar/1.jpg" />
-          <Avatar src="/static/images/avatar/2.jpg" />
-          <Avatar src="/static/images/avatar/3.jpg" />
-          <Avatar src="/static/images/avatar/4.jpg" />
+
+          {users?.slice(0,4).map((user, index) => (
+  <Avatar
+    key={index}
+    src={user.photo}
+   
+  />
+))}
+
         </AvatarGroup>
       </Grid>
   </Grid>
@@ -222,7 +227,7 @@ const handleSend = () => {
         
           <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
             <Avatar
-              src={msg.user.photo || "/test.png"}
+              src={msg.user.photo }
               sx={{ width: 36, height: 36, mr: 1 }}
             />
             <Typography
@@ -269,10 +274,14 @@ const handleSend = () => {
             ml: isMe ? 0 : 6, // aligns under bubble for others
           }}
         >
-          {new Date(msg.timestamp).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {new Date(msg.timestamp).toLocaleString([], {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+})}
+
         </Typography>
       </Box>
     );
@@ -301,6 +310,12 @@ const handleSend = () => {
     placeholder="Type a message"
     value={message}
     onChange={(e) => setMessage(e.target.value)}
+    onKeyDown={(e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  }}
     sx={{
       "& .MuiOutlinedInput-root": {
         borderRadius: "24px",
@@ -318,7 +333,7 @@ const handleSend = () => {
       },
     }}
     onClick={handleSend}
-    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+    
   >
     <IoIosSend />
   </IconButton>

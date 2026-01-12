@@ -1,11 +1,11 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { LuMapPin } from "react-icons/lu";
 import { CiCalendarDate } from "react-icons/ci";
 import { GoPeople } from "react-icons/go";
 import { MdCurrencyRupee } from "react-icons/md";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { g } from "framer-motion/client";
+// import { g } from "framer-motion/client";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { addTrip } from "../data/api";
@@ -15,6 +15,7 @@ import { addTrip } from "../data/api";
 
 function AddTripPage() {
   const [destination, setDestination] = useState("");
+  const [country,setCountry]=useState("")
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
   const [maxPeople, setMaxPeople] = useState("");
@@ -55,6 +56,7 @@ function AddTripPage() {
     today.setHours(0, 0, 0, 0);
 
     if (!destination) newErrors.destination = "Destination is required";
+    if (!country) newErrors.destination = "Country is required";
     if (!description) newErrors.description = "Description is required";
 
     if (!duration || duration < 3 || duration > 30) {
@@ -109,6 +111,8 @@ function AddTripPage() {
         budget: budget,
         description: description,
         groupSize: maxPeople,
+        membersJoined:1,
+        country:country
         //userId: 1 
         //travelType
         //userEmail
@@ -119,6 +123,7 @@ function AddTripPage() {
       console.log('Trip created successfully:', response.data);
       toast.success("Trip created successfully!");
       setDestination("");
+      setCountry("");
       setDescription("");
       setDuration("");
       setMaxPeople("");
@@ -192,7 +197,18 @@ function AddTripPage() {
           />
           {errors.destination && <p className="error">{errors.destination}</p>}
         </div>
-
+      <div>
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <LuMapPin /> Country *
+          </label>
+          <input
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            className="input"
+            placeholder="In which country"
+          />
+          {errors.country && <p className="error">{errors.country}</p>}
+        </div>
         {/* Description */}
         <div>
           <label className="text-sm font-medium text-gray-700">

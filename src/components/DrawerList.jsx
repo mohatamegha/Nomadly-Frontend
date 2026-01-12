@@ -91,7 +91,7 @@ try {
       {/* Group Avatar */}
       <Grid item size={{xs:2,md:1}}>
         <Avatar
-          src="/test.png"
+          src={travel.imageUrl}
           sx={{
             width: { xs: 40, sm: 48 },
             height: { xs: 40, sm: 48 },
@@ -119,7 +119,7 @@ try {
           color="text.secondary"
           sx={{ fontSize: { xs: "0.85rem", sm: "1rem" } }}
         >
-        India
+       {travel.country||"India"}
         </Typography>
         </Box>
 
@@ -250,7 +250,7 @@ try {
   <React.Fragment key={user.userId}>
     <ListItem>
       <ListItemAvatar>
-        <Avatar src={user.photo|| "/test.png"}>
+        <Avatar src={user.photo}>
           {!user.photo && user.name?.[0]}
         </Avatar>
       </ListItemAvatar>
